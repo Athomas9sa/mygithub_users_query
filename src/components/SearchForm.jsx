@@ -1,54 +1,57 @@
 import React, { Component } from "react";
-import SearchForm from './SearchForm';
-import rot13 from "rot-thirteen";
+//import rot13 from "rot-thirteen";
 
 class SearchForm extends Component {
     state = {
-        text: "",
-        submitText: [],
+        userName: "",
+        users: [],
     };
 
     loadData = async () => {
-        const response = await fetch("https://api.github.com/Athomas9sa");
+        const response = await fetch("https://api.github.com/users/Athomas9sa");
         const data = await response.json();
-        return data;
+        //console.log(data)
+            return data;
     };
 
-    _handleChange = (newUser) => {
+    _handleChange = (eventValue) => {
+        //console.log(eventValue)
         this.setState({
-            text: newUser,
+            userName: eventValue,
         });
     };
 
-    _handleSubmit = () => {
-        const { text } = this.state;
-        const userData = rot13(text);
-
+    _handleSubmit = async (event) => {
+        event.preventDefault();//preventsthepagefromreloadingwhenpageisusingsubmit!
+        const userData = await this.loadData();
+        
+        // const { userName } = this.state;
+        // const rotData = rot13(userName);
+        // console.log("hallo:", event)
         this.setState({
-            text: "",
-            submitText: userData,
+            userName: userData.login,
+            // users: userData,
+            // userData: userData.results,
         });
     };
 
     render() {
-        const { text, submitText } = this.state;
+        const { userName } = this.state;
 
         return (
             <>
             <h1>Search Form Github User!!</h1>
-            <form>
+            <form onSubmit={this._handleSubmit}>
                 <label>
                 Search for... to be continued:
-                    <input
+                <input
                     type="text"
                     onChange={(event) => this._handleChange(event.target.value)}
-                    value={userName}
                     />
                 </label>
-                <button type="Submit" value="Submit" onSubmit={this._handleSubmit}>search</button>
+                <button type="submit">search</button>
             </form>
-            <p>{text}</p>
-            <p>{userData}</p>
+            <p>{userName}</p>
             </>
         );
     }

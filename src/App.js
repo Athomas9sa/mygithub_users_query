@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <SearchForm text="RottenText"/>
+      <SearchForm text="sumbitText"/>
     </div>
   );
 }
